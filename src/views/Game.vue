@@ -8,15 +8,24 @@
     <div class="player">
       <div class="playerCards player-card" v-for="(playerCard, index) in activeGame.players[0].hand" :key="index">
         <div class="player-card-info">
-          <p class="player-card-stats">
-            {{playerCard.attack}}
-          </p>
-          <p class="player-card-stats">
-            {{playerCard.defense}}
-          </p>
+          <div class="player-card-stats">
+            <p>
+              {{playerCard.attack}}
+            </p>
+          </div>
+          <div class="player-card-stats">
+            <p>
+              {{playerCard.defense}}
+            </p>
+          </div>
         </div>
         <div>
           <img :src=playerCard.img alt="">
+        </div>
+        <div class="player-card-stats">
+          <p>
+            {{playerCard.health}}
+          </p>
         </div>
       </div>
     </div>
@@ -45,6 +54,8 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 1% 3% 1% 3%;
+    position: absolute;
+    bottom: 50;
   }
 
   .opponent {
@@ -58,21 +69,28 @@
     flex-direction: column;
     justify-content: space-between;
     margin: 5% 3% 5% 3%;
-    background-color: lightslategray;
+    background-color: rgb(48, 53, 58);
     border: 2px solid #42b983;
   }
 
   .player-card-info {
+    display: flex;
     flex-direction: row;
+    justify-content: space-between;
+    padding: 0% 10% 0% 10%;
   }
 
   .player-card-stats {
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
 
   img {
     max-width: 75%;
     height: auto;
+  }
+
+  .game {
+    height: 100vh;
   }
 </style>
