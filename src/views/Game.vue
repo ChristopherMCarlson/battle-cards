@@ -1,19 +1,40 @@
 <template>
   <div class="game">
     <div class="opponent">
-      <div class="opponentCards" v-for="(opponetCard, index) in activeGame.players[1].hand" :key="index">
-        {{opponetCard.name}}
+      <div class="opponentCards card" v-for="(opponentCard, index) in activeGame.players[1].hand" :key="index" @click='opponentCardId = opponentCard.id'>
+        <div class="card-hide">
+          <div class="card-info">
+            <div class="card-stats">
+              <p>
+                {{opponentCard.attack}}
+              </p>
+            </div>
+            <div class="card-stats">
+              <p>
+                {{opponentCard.defense}}
+              </p>
+            </div>
+          </div>
+          <div>
+            <img :src=opponentCard.img alt="">
+          </div>
+          <div class="card-stats">
+            <p>
+              {{opponentCard.health}}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
     <div class="player">
-      <div class="playerCards player-card" v-for="(playerCard, index) in activeGame.players[0].hand" :key="index">
-        <div class="player-card-info">
-          <div class="player-card-stats">
+      <div class="playerCards card" v-for="(playerCard, index) in activeGame.players[0].hand" :key="index" @click='playerCardId = playerCard.id'>
+        <div class="card-info">
+          <div class="card-stats">
             <p>
               {{playerCard.attack}}
             </p>
           </div>
-          <div class="player-card-stats">
+          <div class="card-stats">
             <p>
               {{playerCard.defense}}
             </p>
@@ -22,7 +43,7 @@
         <div>
           <img :src=playerCard.img alt="">
         </div>
-        <div class="player-card-stats">
+        <div class="card-stats">
           <p>
             {{playerCard.health}}
           </p>
@@ -34,6 +55,15 @@
 
 <script>
   export default {
+    name: 'Game',
+    data() {
+      return {
+        "playerId": this.$store.state.game.players[0].id,
+        "playerCardId": "",
+        "opponentId": this.$store.state.game.players[1].id,
+        "opponentCardId": ""
+      }
+    },
     mounted() {
       let id = this.$route.params.id;
       if (!this.activeGame.id) {
@@ -43,6 +73,17 @@
     computed: {
       activeGame() {
         return this.$store.state.game;
+      }
+    },
+    methods: {
+      fight() {
+        let fightObj = {
+          "playerId": this.playerId,
+          "playerCardId": this.playerCardId,
+          "opponentId": this.opponentId,
+          "opponentCardId": this.opponentCardId
+        }
+        this.$store.dispatch("fight", fightObj)
       }
     }
   };
@@ -55,7 +96,7 @@
     justify-content: space-between;
     margin: 1% 3% 1% 3%;
     position: absolute;
-    bottom: 50;
+    bottom: 0;
   }
 
   .opponent {
@@ -65,22 +106,22 @@
     margin: 1% 3% 1% 3%;
   }
 
-  .player-card {
+  .card {
     flex-direction: column;
     justify-content: space-between;
-    margin: 5% 3% 5% 3%;
+    margin: 1% 3% 1% 3%;
     background-color: rgb(48, 53, 58);
     border: 2px solid #42b983;
   }
 
-  .player-card-info {
+  .card-info {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding: 0% 10% 0% 10%;
   }
 
-  .player-card-stats {
+  .card-stats {
     display: flex;
     flex-direction: column;
   }
@@ -90,7 +131,9 @@
     height: auto;
   }
 
-  .game {
-    height: 100vh;
+  .card-hide {
+    /* visibility: hidden; */
   }
+
+  .game {}
 </style>
