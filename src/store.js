@@ -36,6 +36,13 @@ export default new Vuex.Store({
       api.get('' + gameId).then(res => {
         commit('newGame', res.data.data)
       })
+    },
+    fight({ commit, dispatch, state }, fightObj) {
+      let gameId = state.game.id
+      api.put('' + gameId, fightObj).then(res => {
+        console.log(res)
+        dispatch('getGame', gameId)
+      })
     }
   }
 })

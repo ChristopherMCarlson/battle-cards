@@ -2,7 +2,7 @@
   <div class="game">
     <div class="opponent">
       <div class="opponentCards card" v-for="(opponentCard, index) in activeGame.players[1].hand" :key="index" @click='opponentCardId = opponentCard.id'>
-        <div class="card-hide">
+        <div v-bind:class="{'card-show': opponentCard.visible}" class="card-hide">
           <div class="card-info">
             <div class="card-stats">
               <p>
@@ -25,6 +25,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div>
+      <button @click="fight()">Fight!</button>
     </div>
     <div class="player">
       <div class="playerCards card" v-for="(playerCard, index) in activeGame.players[0].hand" :key="index" @click='playerCardId = playerCard.id'>
@@ -78,11 +81,12 @@
     methods: {
       fight() {
         let fightObj = {
-          "playerId": this.playerId,
+          "playerId": this.$store.state.game.players[0].id,
           "playerCardId": this.playerCardId,
-          "opponentId": this.opponentId,
-          "opponentCardId": this.opponentCardId
+          "opponentId": this.$store.state.game.players[1].id,
+          "opponentCardId": this.opponentCardId,
         }
+        console.log(fightObj)
         this.$store.dispatch("fight", fightObj)
       }
     }
@@ -95,8 +99,6 @@
     flex-direction: row;
     justify-content: space-between;
     margin: 1% 3% 1% 3%;
-    position: absolute;
-    bottom: 0;
   }
 
   .opponent {
@@ -132,8 +134,17 @@
   }
 
   .card-hide {
-    /* visibility: hidden; */
+    visibility: hidden;
   }
 
-  .game {}
+  .card-show {
+    visibility: visible;
+  }
+
+  .game {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 </style>
